@@ -1,11 +1,9 @@
 package fraction;
-
 /**
  * Class Fraction check if the fractions are in correct value
  * then normalize Fraction and calculate fractions. 
  * It also check if one fraction is greater or smaller that other fraction
  * or fractions are equal to each other. 
- * 
  * 
  * @author David Sajdl
  * username dsajdl01
@@ -13,8 +11,7 @@ package fraction;
  */
 public class Fraction {
     private int n;
-    private int d;
-    
+    private int d; 
     /**
      * Constructor with two parameter
      * 
@@ -68,8 +65,12 @@ public class Fraction {
       public void getFraction(int n, int d){
     	if(n == 0){System.out.print("Invalid fraction! Numerator cannot be zero");
     	}
-    	else if(n >= 100000000 || d >= 100000000 ||  n <= -100000000 || d <= -100000000){
-   		 	System.out.println("The maximum and minimum entered number or result of numerator and denominator could be 99999999 or -99999999");
+    	else if(testInteger(n,d)){
+   		 	System.out.println("The maximum entered number or result of the numerator and denominator must be smaller than " + Integer.MAX_VALUE
+   		 			+ "\nand the minimum entered number or result of the numerator and denominator must be greater than " + Integer.MIN_VALUE
+   		 			+ ".\nNumerator was assigned to zero.");
+   		 	this.n = 0;
+   		 	this.d = 0;
     	}
       	else{
     	  this.n = n;
@@ -79,6 +80,24 @@ public class Fraction {
             }
       	}
       }
+      
+      /**
+       * checks if numerator and denominator is not greater then 2147483646 
+       * or if numerator and denominator is not smaller than -2147483647
+       * 
+       * @param  n is integer as numerator of the Fraction number
+       * @param  d is integer as denominator of the Fraction number
+       * 
+       *  @return true if numerator and denominator is in the range between 2147483646 to -2147483647
+       *  otherwise return false
+       */
+      private boolean testInteger(int n, int d){
+  		if(n >= Integer.MAX_VALUE) return true;
+  		else if (d >= Integer.MAX_VALUE) return true;
+  		else if (n <= Integer.MIN_VALUE) return true;
+  		else if (d <= Integer.MIN_VALUE) return true;
+  		else return false;
+  	}
      
      /**
      * checks whether the string contain correct value (fraction within 5 digits)
@@ -91,10 +110,11 @@ public class Fraction {
                 getFractionNumber(strFraction);
             }
             else{
-                boolean isFrc = checkFraction(strFraction);
-                if(isFrc){
+                //boolean isFrc = checkFraction(strFraction);
+                if(checkFraction(strFraction)){
+                	System.out.println(strFraction);
                     System.out.println("The maximum and minimum number of numerator or denominator "
-                    		+ "that can be entered is: 99999999 -99999999");
+                    		+ "that can be entered is: + " + Integer.MAX_VALUE + " " + Integer.MIN_VALUE + "!!!!");
                 }
                 else{
                     System.out.println("This in invalid fruction number " + strFraction);
@@ -108,7 +128,7 @@ public class Fraction {
       *@return s.matches(regExp) true/false if string contains fraction number it returns true else return false
       */
      private boolean checkFraction(String s){
-        String regExp = "^[-]?[0-9]|[-]?[0-9]+/+[-]?[0-9]+$";
+        String regExp = "^[-]?[0-10]|[-]?[0-10]+/+[-]?[0-10]+$";
         return s.matches(regExp);
     }
       /**
@@ -119,7 +139,7 @@ public class Fraction {
      * @return num.matches(regExp)"true/false" if the string contain Fraction it returns true otherwise false
      */
       private boolean checkString(String num){
-          String regExp = "^[-]?[0-9]{1,8}|[-]?[0-9]{1,8}+/+[-]?[0-9]{1,8}+$";
+          String regExp = "^[-]?[0-9]{1,10}|[-]?[0-9]{1,10}+/+[-]?[0-9]{1,10}+$";
           return num.matches(regExp);
       }
       
@@ -167,19 +187,16 @@ public class Fraction {
           if(n < 0 && d < 0){n = -n;
               d = -d;}
           else if(d < 0){n = -n;
-              d = -d;}
-              
+              d = -d;}   
           if(n < 0){a = -n;
               b = d;}
           else{a = n;
               b = d;}
-              
           while(b>0){
               int temp = b;
               b = a%b;
               a = temp;
-          }
-          
+          }     
           this.n = n/a;
           this.d = d/a;
       }
@@ -189,6 +206,7 @@ public class Fraction {
      * 
      * @return  string as a Fraction 
      */
+      @Override
       public String toString() {
             if(n == 0 || d == 0){ return "0";}
              else if(d == 1){ return n+""; }
@@ -253,9 +271,7 @@ public class Fraction {
             return false;}
         Fraction other = (Fraction) o;
         if (other != null && other instanceof Fraction){ 
-            return (n == other.n) && (d == other.d);
-        
-        }
+            return (n == other.n) && (d == other.d);}
        return false;
     }
     
@@ -289,9 +305,18 @@ public class Fraction {
      * 
      * @param frcNum as object that contain Fraction number
      * @return addResults objects is a sum of two added Fraction. 
+     * If the adding result is out of the range returns null 
      */
     public Fraction add(Fraction frcNum) {
-        Fraction addResult = new Fraction(this.n*frcNum.d + this.d*frcNum.n, this.d*frcNum.d);
+    	
+    	long result = (long)this.n * (long)frcNum.d + (long)this.d + (long)frcNum.n;
+    	long result2 = (long)this.d * (long)frcNum.d;
+    	if(checkIntegers(result,result2)){
+    		System.out.println("Adding result is out of the integer range. The result is assigned to null");
+    		return null;
+    	}
+        
+    	Fraction addResult = new Fraction(this.n*frcNum.d + this.d*frcNum.n, this.d*frcNum.d);
         return addResult;
     }
     
@@ -299,10 +324,17 @@ public class Fraction {
      * subtracts two Fractions "objects"and provide result
      * 
      * @param frcNum as object that contain Fraction number
-     * @return sudResults objects is a subtraction of two substract Fraction. 
+     * @return sudResults objects is a subtraction of two subtract Fraction.
+     * If the subtraction result is out of the range returns null  
      */
     public Fraction sub(Fraction frcNum) {
-        Fraction subResult = new Fraction(this.n*frcNum.d - this.d*frcNum.n, this.d*frcNum.d);
+    	long result = (long)this.n * (long)frcNum.d - (long)this.d + (long)frcNum.n;
+    	long result2 = (long)this.d * (long)frcNum.d;
+    	if(checkIntegers(result,result2)){
+    		System.out.println("Subtracting result is out of the integer range. The result is assigned to null");
+    		return null;
+    	}
+    	Fraction subResult = new Fraction(this.n*frcNum.d - this.d*frcNum.n, this.d*frcNum.d);
         return subResult;
      }
         
@@ -311,8 +343,15 @@ public class Fraction {
      * 
      * @param frcNum as object that contain Fraction number
      * @return mulResults objects is a multiplication of two multiply Fraction. 
+     * If the multiplying result is out of the range returns null 
      */ 
     public Fraction mul(Fraction frcNum) {
+    	long result = (long)this.n * (long)frcNum.n;
+    	long result2 = (long)this.d * (long)frcNum.d;
+    	if(checkIntegers(result,result2)){
+    		System.out.println("Multiplying result is out of the integer range. The result is assigned to null");
+    		return null;
+    	}
         Fraction mulResult = new Fraction(this.n*frcNum.n, this.d*frcNum.d);
         return mulResult;
     }
@@ -322,10 +361,34 @@ public class Fraction {
      * 
      * @param frcNum as object that contain Fraction number
      * @return mulResults objects is a division of two divided Fraction. 
+     * If the division result is out of the range returns null 
      */ 
     public Fraction div(Fraction frcNum) {
+    	long result = (long)this.n * (long)frcNum.d;
+    	long result2 = (long)this.d * (long)frcNum.n;
+    	if(checkIntegers(result,result2)){
+    		System.out.println("Dividing result is out of the integer range. The result is assigned to null");
+    		return null;
+    	}
         Fraction divResult = new Fraction(this.n*frcNum.d, this.d*frcNum.n);
         return divResult;
+    }
+    /**
+     * checks if the income long numbers are not greater then 2147483646 
+     * or if are not smaller than -2147483647
+     * 
+     * @param  a is long as result of the Fraction number
+     * @param  b is long as denominator of the Fraction number
+     * 
+     *  @return true if the numbers are in the range between 2147483646 to -2147483647
+     *  otherwise return false
+     */
+    private boolean checkIntegers(long a, long b){
+    	if(a >= Integer.MAX_VALUE) return true;
+  		else if (b >= Integer.MAX_VALUE) return true;
+  		else if (a <= Integer.MIN_VALUE) return true;
+  		else if (b <= Integer.MIN_VALUE) return true;
+    	return false;
     }
 
 }
