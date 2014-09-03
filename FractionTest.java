@@ -1,11 +1,8 @@
 package fraction;
-
 import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 /**
  * Class FractionTest is testing methods of class Fraction
  *
@@ -50,8 +47,7 @@ public class FractionTest {
 	    public void testNormalizationWith2InputsII(){
 	        Fraction textNorII = new Fraction(-868,-28);
 	        assertEquals("31", textNorII.toString());
-	    }
-	    
+	    }	    
 	    /**
 	     * tests normalization method from class Fraction. 
 	     * It calls constructor with 1 integers parameter 
@@ -138,35 +134,44 @@ public class FractionTest {
 	    
 	    /**
 	     * tests getFraction method from class fraction
-	     * it is when numerator is greater than 99999999
+	     * it is when numerator is greater or equal than 2147483647
 	     * 
 	     */
 	    @Test
 	    public void testBigIntegerN(){
-	        Fraction textNorI = new Fraction(182765124,122);
+	        Fraction textNorI = new Fraction(2147483647,122);
 	        assertEquals("0",textNorI.toString());
 	    }
 	    /**
 	     * tests getFraction method from class fraction
-	     * it is when denominator is greater than 99999999
+	     * it is when denominator is greater or equal than 2147483647
 	     * 
 	     */
 	    @Test
 	    public void testBigIntegerD(){
-	        Fraction textNorI = new Fraction(23,100000000);
+	        Fraction textNorI = new Fraction(23,2147483647);
 	        assertEquals("0",textNorI.toString());
 	    }
 	    /**
 	     * tests getFraction method from class fraction
-	     * it is when denominator is equal to 99999999
+	     * it is when denominator is greater to 2147483646
 	     * 
 	     */
 	    @Test
 	    public void testBigInteger(){
-	        Fraction textNorI = new Fraction(99999999);
-	        assertEquals("99999999",textNorI.toString());
+	        Fraction textNorI = new Fraction(2147483647);
+	        assertEquals("0",textNorI.toString());
 	    }
-	    
+	    /**
+	     * tests getFraction method from class fraction
+	     * it is when denominator is equal to 2147483646
+	     * 
+	     */
+	    @Test
+	    public void testBigIntegerII(){
+	        Fraction textNorI = new Fraction(2147483646);
+	        assertEquals("2147483646",textNorI.toString());
+	    }
 	    /**
 	     * test equals method from class Fraction
 	     * it checks if fraction is not equal to other fraction. 
@@ -232,7 +237,6 @@ public class FractionTest {
 	        Fraction f = new Fraction(4);
 	        assertEquals(true,f.equals(f1.inverse()));
 	    }
-	    
 	    /**
 	     * tests inverse method from class Fraction. 
 	     * it checks if fraction or their numerator and denominator were converted. 
@@ -243,8 +247,6 @@ public class FractionTest {
 	        Fraction fII = new Fraction(-11,30);
 	        assertEquals(true,fII.equals(f2.inverse()));
 	    }
-	    
-	    
 	    /**
 	     * tests inverse method and abs method from class Fraction. 
 	     * it checks if fraction or their numerator and denominator were converted
@@ -277,7 +279,6 @@ public class FractionTest {
 	        Fraction addResII = new Fraction("6899/44");
 	        assertEquals(true,addResII.equals(f1.add(f4)));
 	    }
-	    
 	    /**
 	     * tests sub method from class Fraction.
 	     * it checks if two fraction were subtracted and if they produce right result. 
@@ -299,7 +300,6 @@ public class FractionTest {
 	        Fraction subResIII = new Fraction(-139,55);
 	        assertEquals(true,subResIII.equals(f2.sub(f3)));
 	    }
-	   
 	    /**
 	     * tests mul method from class Fraction.
 	     * it checks if two fraction were multiplied and if they produce right result. 
@@ -343,7 +343,6 @@ public class FractionTest {
 	        Fraction divRes = new Fraction("-287/5");
 	        assertEquals(true,divRes.equals(f4.div(f2)));
 	    }
-	    
 	    /**
 		 * tests div method from class Fraction.
 		 * it checks if two fraction were divided and if they produce right result. 
@@ -365,7 +364,6 @@ public class FractionTest {
 	        Fraction divResIII = new Fraction(150,11);
 	        assertEquals(true,divResIII.equals(f2.div(f3)));
 	    }
-	    
 	    /**
 	     * tests div method from class Fraction.
 	     * it checks if two fraction were divided and if they produce right result. 
@@ -376,7 +374,6 @@ public class FractionTest {
 	        Fraction divResIV = new Fraction(-5,4);
 	        assertEquals(true,divResIV.equals(f1.div(f3)));
 	    }
-	    
 	    /**
 	     * tests negate method from class Fraction.
 	     * it checks if positive fraction were converted into negative fraction 
@@ -386,7 +383,6 @@ public class FractionTest {
 	        Fraction neg = new Fraction("30/11");
 	        assertEquals(true,neg.equals(f2.negate()));
 	    }
-	    
 	    /**
 	     * tests negate method from class Fraction.
 	     * it checks if negative fraction were converted into positive fraction 
@@ -396,8 +392,6 @@ public class FractionTest {
 	        Fraction neg = new Fraction("-1/4");
 	        assertEquals(true,neg.equals(f1.negate()));
 	    }
-	    
-	   
 	    /**
 	     * tests greaterThan method from class Fraction.
 	     * it checks if first fraction is greater that second fraction 
@@ -407,7 +401,6 @@ public class FractionTest {
 	    public void testGreaterThanMethod(){
 	        assertEquals(true,f1.greaterThan(f3));
 	    }
-	    
 	    /**
 	     * tests greaterThan method from class Fraction.
 		 * it checks if first fraction is greater that second fraction 
@@ -417,8 +410,6 @@ public class FractionTest {
 	    public void testGreaterThanAndNegateMethod(){
 	        assertEquals(true,f1.greaterThan(f3.negate()));
 	    }
-	    
-	    
 	   /**
 	     * tests lessThan method from class Fraction.
 	     * it checks if first fraction is smaller that second fraction 
@@ -428,7 +419,6 @@ public class FractionTest {
 	    public void testSmallerThanMethod(){
 	        assertEquals(true,f3.lessThan(f1));
 	    }
-	    
 	    /**
 	     * tests lessThan method from class Fraction.
 	     * it checks if first fraction is smaller that second fraction 
@@ -454,7 +444,6 @@ public class FractionTest {
 	     *
 	     * Called after every test case method.
 	     */
-	
 	@After
     public void tearDown(){
         // assign object to null
@@ -462,5 +451,4 @@ public class FractionTest {
         f2 = null;
         f3 = null;
     }
-
 }
