@@ -110,7 +110,6 @@ public class Fraction {
                 getFractionNumber(strFraction);
             }
             else{
-                //boolean isFrc = checkFraction(strFraction);
                 if(checkFraction(strFraction)){
                 	System.out.println(strFraction);
                     System.out.println("The maximum and minimum number of numerator or denominator "
@@ -142,42 +141,47 @@ public class Fraction {
           String regExp = "^[-]?[0-9]{1,10}|[-]?[0-9]{1,10}+/+[-]?[0-9]{1,10}+$";
           return num.matches(regExp);
       }
-      
      /**
      * converts string into integers: numerator and denominator  
      * 
      * @param is string that contain Fraction number
      */ 
       private void getFractionNumber(String strNum){
-        int n1, d1;
+        long n1, d1;
     	  
     	 if((strNum.indexOf("/") < 0)){
-                n1 = Integer.parseInt(strNum);
+                n1 = Long.parseLong(strNum);
     		 	if(n1 == 0){
     		 		System.out.print("invalid fruction!!! numerator cannot be zero");
     		 	}
+    		 	else if(checkIntegers(n1,1)){
+    		 		System.out.println(strNum + " numerator is out of range. It mus be smaller than " + Integer.MAX_VALUE 
+    		 				+ " of greater than " + Integer.MIN_VALUE);
+    		 	}
     		 	else{
-    		 		this.n = n1; 
+    		 		this.n = (int)n1; 
     		 		this.d = 1;
     		 	}
         }
         else{
             String strAr[] = strNum.split("/");
-            n1 = Integer.parseInt(strAr[0]);
-            d1 = Integer.parseInt(strAr[1]);
+            n1 = Long.parseLong(strAr[0]);
+            d1 = Long.parseLong(strAr[1]);
             if(n1 == 0){
             	System.out.print("invalid fruction!!! numerator cannot be zero");
             }
+            else if(checkIntegers(n1,d1)){
+		 		System.out.println(strNum + " numerator is out of range. It mus be smaller than " + Integer.MAX_VALUE 
+		 				+ " of greater than " + Integer.MIN_VALUE);
+		 	}
             else{
-            	this.n = n1;
-            	this.d = d1;
+            	this.n = (int)n1;
+            	this.d = (int)d1;
             	if(this.d != 1){
                     normalization(); }
             }
         }
-     
      }
-     
      /**
      * keeps Fraction (numerator and denominator) in normalized form 
      *  
@@ -200,7 +204,6 @@ public class Fraction {
           this.n = n/a;
           this.d = d/a;
       }
-     
      /**
      * represents the current object or converts numerator and denominator into string  
      * 
@@ -208,14 +211,15 @@ public class Fraction {
      */
       @Override
       public String toString() {
-            if(n == 0 || d == 0){ return "0";}
-             else if(d == 1){ return n+""; }
-             else if(n < 0){   int positive = n * (-1);
+            if(n == 0 || d == 0) return "0";
+             else if(d == 1) return n+""; 
+             else if(n < 0){   
+            	 int positive = n * (-1);
                  if(positive > d){ return n/d + " " + positive%d + "/" + d;}
-                 else{ return n + "/" + d;}
-            }
-            else if(n > d){return n/d + " " + n%d + "/" + d;}
-            else{  return n + "/" + d;}
+                 else return n + "/" + d;
+                 }
+            else if(n > d) return n/d + " " + n%d + "/" + d;
+            else return n + "/" + d;
      }
      
      /**
@@ -224,29 +228,21 @@ public class Fraction {
      * @return  FractionAbs object as absolute value 
      */
     public Fraction abs(){
-        Fraction FractionAbs;
         if(n == 0){
             System.out.print("Is invalid fraction ");
-            return FractionAbs = new Fraction(0);
+            return new Fraction(0);
         }
-        else if(n>0){
-            FractionAbs = new Fraction(n/d);
-            return FractionAbs; }
-        else{
-            FractionAbs = new Fraction(-n/d);
-            return FractionAbs; }
+        else if(n>0) return  new Fraction(n/d);
+        else return new Fraction(-n/d);
     }
-    
      /**
      * converts positive Fraction into negative and other way round  
      * 
      * @return negRes is object as Fraction number 
      */
     public Fraction negate(){
-        Fraction negRes;
         int neg = n*(-1);
-          negRes = new Fraction(neg + "/" + d);
-          return negRes;
+          return new Fraction(neg + "/" + d);
         }
      
     /**
@@ -255,9 +251,7 @@ public class Fraction {
      * @return FractionInvers is object as inverse Fraction number 
      */
     public Fraction inverse(){
-       Fraction FractionInvers;
-         FractionInvers = new Fraction(d + "/" + n);
-        return FractionInvers;
+         return new Fraction(d + "/" + n);
     }
     
     /**
@@ -267,14 +261,12 @@ public class Fraction {
      * @return true/false if Fractions are equal return true otherwise false 
      */
     public boolean equals(Object o){
-        if (getClass() != o.getClass()){
-            return false;}
+        if (getClass() != o.getClass())return false;
         Fraction other = (Fraction) o;
         if (other != null && other instanceof Fraction){ 
             return (n == other.n) && (d == other.d);}
        return false;
     }
-    
     /**
      * compares two Fractions "objects" if first one is greater than second one
      * 
@@ -282,11 +274,9 @@ public class Fraction {
      * @return true/false if the first Fraction is greater than second one its return true otherwise false 
      */
     public boolean greaterThan(Fraction f){
-        if((long)n*f.d > (long)d*f.n){
-            return true;}
+        if((long)n*f.d > (long)d*f.n) return true;
         return false;
     }
-    
     /**
      * compares two Fractions "objects" if the first one is less than second one
      * 
@@ -294,9 +284,7 @@ public class Fraction {
      * @return true/false if the first Fraction is less than second one its return true otherwise false 
      */
     public boolean lessThan(Fraction f){
-        if((long)n*f.d < (long)d*f.n){
-            return true;
-        }
+        if((long)n*f.d < (long)d*f.n) return true;
         return false;
     }
     
@@ -315,9 +303,7 @@ public class Fraction {
     		System.out.println("Adding result is out of the integer range. The result is assigned to null");
     		return null;
     	}
-        
-    	Fraction addResult = new Fraction(this.n*frcNum.d + this.d*frcNum.n, this.d*frcNum.d);
-        return addResult;
+    	return new Fraction(this.n*frcNum.d + this.d*frcNum.n, this.d*frcNum.d);
     }
     
     /**
@@ -334,8 +320,7 @@ public class Fraction {
     		System.out.println("Subtracting result is out of the integer range. The result is assigned to null");
     		return null;
     	}
-    	Fraction subResult = new Fraction(this.n*frcNum.d - this.d*frcNum.n, this.d*frcNum.d);
-        return subResult;
+    	return new Fraction(this.n*frcNum.d - this.d*frcNum.n, this.d*frcNum.d);
      }
         
     /**
@@ -352,10 +337,8 @@ public class Fraction {
     		System.out.println("Multiplying result is out of the integer range. The result is assigned to null");
     		return null;
     	}
-        Fraction mulResult = new Fraction(this.n*frcNum.n, this.d*frcNum.d);
-        return mulResult;
+        return new Fraction(this.n*frcNum.n, this.d*frcNum.d);
     }
-    
     /**
      * divided two Fractions "objects"and provide result
      * 
@@ -370,8 +353,8 @@ public class Fraction {
     		System.out.println("Dividing result is out of the integer range. The result is assigned to null");
     		return null;
     	}
-        Fraction divResult = new Fraction(this.n*frcNum.d, this.d*frcNum.n);
-        return divResult;
+        return new Fraction(this.n*frcNum.d, this.d*frcNum.n);
+        
     }
     /**
      * checks if the income long numbers are not greater then 2147483646 
@@ -390,5 +373,4 @@ public class Fraction {
   		else if (b <= Integer.MIN_VALUE) return true;
     	return false;
     }
-
 }
